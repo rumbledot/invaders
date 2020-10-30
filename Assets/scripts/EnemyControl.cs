@@ -5,8 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class EnemyControl : MonoBehaviour
 {
-    private int moveTimer = 300;
-    private int moveCounter = 0;
+    private float moveTimer = 300f;
+    private float moveCounter = 0f;
+    private float oneBlock = 1f;
     private float oneSquare = 2f;
 
     private Vector3[] movePattern;
@@ -15,11 +16,10 @@ public class EnemyControl : MonoBehaviour
     private int patternIndex = 0;
 
     [SerializeField]
-    private int life = 1;
+    private float life = 1f;
 
     private Component[] rends;
     private Color defaultColor;
-    private int rendererCount = 0;
     private Color lerpedColor = Color.grey;
     private float lerpLevel = 0f;
 
@@ -29,6 +29,9 @@ public class EnemyControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        life = life * GameControl.instance.healthFactorial;
+        moveTimer = moveTimer * GameControl.instance.timerFactorial;
+
         rends = gameObject.GetComponentsInChildren<Renderer>();
         defaultColor = GetComponentInChildren<Renderer>().material.color;
         foreach (Renderer r in rends)
@@ -38,10 +41,10 @@ public class EnemyControl : MonoBehaviour
 
         movePattern = new Vector3[] 
         {
-            new Vector3(0,0.5f,0),
-            new Vector3(0,0,0.5f),
-            new Vector3(0,-0.5f,0),
-            new Vector3(0,0,-0.5f)
+            new Vector3(0, oneBlock, 0),
+            new Vector3(0, 0, oneBlock),
+            new Vector3(0, -oneBlock, 0),
+            new Vector3(0, 0, -oneBlock)
         };
     }
 
@@ -124,6 +127,10 @@ public class EnemyControl : MonoBehaviour
         {
             case "Recycle.behind":
                 GameControl.instance.subScore(50);
+                Destroy(gameObject);
+                break;
+            case "Player":
+                GameControl.instance.subScore(100);
                 Destroy(gameObject);
                 break;
             default:

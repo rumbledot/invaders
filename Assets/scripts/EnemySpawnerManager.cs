@@ -13,9 +13,11 @@ public class EnemySpawnerManager : MonoBehaviour
     private List<Transform> spawners;
     [SerializeField]
     private GameObject[] enemies;
-    
     [SerializeField]
-    private int spawnTimer = 1200;
+    private GameObject boss;
+
+    [SerializeField]
+    private float spawnTimer = 1200f;
     private int spawnCounter = 0;
     private bool canSpawn = true;
 
@@ -24,6 +26,7 @@ public class EnemySpawnerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        InvokeRepeating("BringOutTheBos", 60f, 90f);
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
             spawners.Add(gameObject.transform.GetChild(i));
@@ -38,6 +41,20 @@ public class EnemySpawnerManager : MonoBehaviour
         {
             SpawnerCounter();
             SpawnerManager();
+        }
+    }
+
+    public void SetSpawnTimer(float t)
+    {
+        spawnTimer = t;
+    }
+
+    private void BringOutTheBos()
+    {
+        if (!GameControl.instance.getBosActive())
+        {
+            Instantiate(boss, new Vector3(0, 0, 0), Quaternion.identity);
+            GameControl.instance.setBosActive(true);
         }
     }
 

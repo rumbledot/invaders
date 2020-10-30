@@ -50,8 +50,12 @@ public class BulletControl : MonoBehaviour
                 break;
             case "Enemy":
                 col.gameObject.GetComponent<EnemyControl>().takeDamage();
-                GameObject explo = Instantiate(explosion, transform.position, Quaternion.identity);
-                Destroy(explo, 1f);
+                Destroy(Instantiate(explosion, transform.position, Quaternion.identity), 1f);
+                Destroy(gameObject);
+                break;
+            case "Boss":
+                col.gameObject.GetComponent<BossControl>().takeDamage();
+                Destroy(Instantiate(explosion, transform.position, Quaternion.identity), 1f);
                 Destroy(gameObject);
                 break;
             default:

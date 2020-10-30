@@ -11,6 +11,10 @@ TagManager:
   - Recycle.behind
   - BUTTON.RESTART
   - BUTTON.MENU
+  - PANEL.PAUSE
+  - Parent.Active.Bullet
+  - TEXT.PAUSE
+  - Boss
   layers:
   - Default
   - TransparentFX

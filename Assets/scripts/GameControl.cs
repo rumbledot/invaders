@@ -23,6 +23,19 @@ public class GameControl : MonoBehaviour
     public GameObject activeEnemies;
     public GameObject activeBullets;
 
+    private bool isBosActive = false;
+
+    [SerializeField]
+    private Dropdown selectDiffcultyLevel;
+    private int diffLevel;
+    private String[] diffLevelString = 
+        new String[] {
+            "Easy", "Normal", "Hard"
+        };
+    public float healthFactorial;
+    public float speedFactorial;
+    public float timerFactorial;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -33,7 +46,57 @@ public class GameControl : MonoBehaviour
         restartBtn.onClick.AddListener(RestartTheGame);
         menuBtn.onClick.AddListener(BackToMenu);
 
+        SetEasyDiff();
+
+        selectDiffcultyLevel.onValueChanged.AddListener(delegate
+        {
+            GetSelectedDiffculty(selectDiffcultyLevel);
+        });
+
         player = GameObject.FindGameObjectWithTag("Player");
+    }
+
+    public void GetSelectedDiffculty(Dropdown dd)
+    {
+        switch (dd.value)
+        {
+            case 0:
+                SetEasyDiff();
+                break;
+            case 1:
+                SetNormalDiff();
+                break;
+            case 2:
+                SetHardDiff();
+                break;
+            default:
+                SetEasyDiff();
+                break;
+        }
+    }
+
+    private void SetHardDiff()
+    {
+        diffLevel = 2;
+        healthFactorial = 1.4f;
+        speedFactorial = 1.4f;
+        timerFactorial = 0.8f;
+    }
+
+    private void SetNormalDiff()
+    {
+        diffLevel = 1;
+        healthFactorial = 1.2f;
+        speedFactorial = 1.2f;
+        timerFactorial = 1f;
+    }
+
+    private void SetEasyDiff()
+    {
+        diffLevel = 0;
+        healthFactorial = 1f;
+        speedFactorial = 1f;
+        timerFactorial = 1.2f;
     }
 
     private void BackToMenu()
@@ -73,6 +136,10 @@ public class GameControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (score < 0)
+        {
+            ShowLoosePanel();
+        }
         scoreText.text = score.ToString();
     }
 
@@ -86,9 +153,33 @@ public class GameControl : MonoBehaviour
         score -= point;
     }
 
+    public void setBosActive(Boolean b)
+    {
+        isBosActive = b;
+    }
+    public Boolean getBosActive()
+    {
+        return isBosActive;
+    }
+
     private void ShowPausePanel()
     {
         isPaused = !isPaused;
         pausePanel.SetActive(isPaused);
+        if (isPaused)
+        {
+            GameObject.FindGameObjectWithTag("TEXT.PAUSE").GetComponent<Text>().text = "PAUSE on " + diffLevelString[diffLevel];
+        }
+    }
+
+    private void ShowLoosePanel()
+    {
+        isPaused = !isPaused;
+        pausePanel.SetActive(isPaused);
+        if (isPaused)
+        {
+            GameObject.FindGameObjectWithTag("TEXT.PAUSE").GetComponent<Text>().text = "YOU LOOSE!";
+        }
+        RestartTheGame();
     }
 }

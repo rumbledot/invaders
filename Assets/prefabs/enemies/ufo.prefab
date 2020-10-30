@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7537100040389081704}
   m_Layer: 0
   m_Name: ufo
-  m_TagString: Enemy
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -44,10 +44,10 @@ GameObject:
   - component: {fileID: 8885148654187098133}
   - component: {fileID: 5214990879853889366}
   - component: {fileID: 6068268368476131747}
-  - component: {fileID: 7738950875081805018}
+  - component: {fileID: 8470618445105588697}
   m_Layer: 0
   m_Name: ufo
-  m_TagString: Enemy
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,7 +142,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.13999999, y: 0.29999998, z: 0.02}
   m_Center: {x: 0.02, y: 0, z: 0.01}
---- !u!114 &7738950875081805018
+--- !u!114 &8470618445105588697
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,9 +151,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6594230905907433732}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f62e2e64bf27d3145b0fca228900c02b, type: 3}
+  m_Script: {fileID: 11500000, guid: 14759e3d57f4a974c80db8623317559d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 3
+  life: 15
+  speed: 500
   explosion: {fileID: 6288062303154283969, guid: aba95082255b1954ca696fc4f6243c8d,
     type: 3}
