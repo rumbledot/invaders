@@ -75,9 +75,9 @@ public class GameControl : MonoBehaviour
     private void SetDiffLevel()
     {
         diffLevel = UniversalManager.instance.getDiffLevel();
-        healthFactorial = diffs[diffLevel].healthFactorial;
-        speedFactorial = diffs[diffLevel].speedFactorial;
-        timerFactorial = diffs[diffLevel].timerFactorial;
+        healthFactorial = diffs[diffLevel].getHealthFactorial();
+        speedFactorial = diffs[diffLevel].getSpeedFactorial();
+        timerFactorial = diffs[diffLevel].getTimerFactorial();
     }
     private void SetEasyDiff()
     {
@@ -89,7 +89,7 @@ public class GameControl : MonoBehaviour
 
     private void BackToMenu()
     {
-        UniversalManager.instance.addScore(score);
+        GameObject.FindGameObjectWithTag("Universal.manager").GetComponent<UniversalManager>().addScore("aaa", score);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
@@ -97,7 +97,7 @@ public class GameControl : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         //if (activeEnemies.transform.childCount > 0)
-        //{
+        //
         //    for (int i = 0; i < activeEnemies.transform.childCount; i++)
         //    {
         //        Destroy(activeEnemies.transform.GetChild(i).gameObject);

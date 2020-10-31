@@ -23,6 +23,7 @@ TagManager:
   - Menu.diff.hard
   - Menu.leader
   - Universal.manager
+  - Menu.back
   layers:
   - Default
   - TransparentFX

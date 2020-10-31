@@ -15,7 +15,7 @@ public class UniversalManager : MonoBehaviour
         new String[] {
             "Easy", "Normal", "Hard"
         };
-    private List<int> scores;
+    private List<ScoreClass> scores = new List<ScoreClass>();
 
     void Awake()
     {
@@ -50,11 +50,17 @@ public class UniversalManager : MonoBehaviour
     {
         return diffLevelString[diffLevel];
     }
-    public void addScore(int s)
+    public void addScore(string n, int s)
     {
-        scores.Add(s);
+        ScoreClass newScore = new ScoreClass(n, s);
+        scores.Add(newScore);
 
         SaveScores();
+    }
+
+    public List<ScoreClass> getScores()
+    {
+        return scores;
     }
 
     void SaveScores()
@@ -79,6 +85,11 @@ public class UniversalManager : MonoBehaviour
             var data = bf.Deserialize(file);
             file.Close();
             Debug.Log("Game data loaded!" + data);
+            foreach (ScoreClass d in (List<ScoreClass>)data)
+            {
+                Debug.Log("SCORE : " + d.getName() + " : " + d.getScore());
+            }
+            scores = (List<ScoreClass>)data;
         }
         else Debug.LogError("There is no save data!");
     }

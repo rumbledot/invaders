@@ -40,7 +40,8 @@ public class MovePlaceholder : MonoBehaviour
 
     private void GoOnPlaying()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("Game");
     }
 
     void Update()
@@ -75,6 +76,10 @@ public class MovePlaceholder : MonoBehaviour
                         toggleDiffMenus();
                         break;
                     case "menu.lb":
+                        SceneManager.LoadScene("LeaderBoard");
+                        break;
+                    case "button.back":
+                        SceneManager.LoadScene("Menu");
                         break;
                     default:
                         break;

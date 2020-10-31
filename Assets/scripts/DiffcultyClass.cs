@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DiffcultyClass
 {
-    public float healthFactorial;
-    public float speedFactorial;
-    public float timerFactorial;
+    private float healthFactorial;
+    private float speedFactorial;
+    private float timerFactorial;
 
     public DiffcultyClass(float h, float s, float t)
     {
@@ -15,7 +15,10 @@ public class DiffcultyClass
         this.timerFactorial = t;
     }
 
-    public string HealthFactorial { get; }
-    public string SpeedFactorial { get; }
-    public string TimerFactorial { get; }
+    public float getHealthFactorial() { return healthFactorial; }
+    public void setHealthFactorial(float h) { healthFactorial = h; }
+    public float getSpeedFactorial() { return speedFactorial; }
+    public void setSpeedFactorial(float s) { speedFactorial = s; }
+    public float getTimerFactorial() { return timerFactorial; }
+    public void setTimerFactorial(float t) { timerFactorial = t; }
 }
