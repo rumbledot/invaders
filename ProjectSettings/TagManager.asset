@@ -15,6 +15,14 @@ TagManager:
   - Parent.Active.Bullet
   - TEXT.PAUSE
   - Boss
+  - TEXT.INFO
+  - Menu.play
+  - Menu.diff
+  - Menu.diff.easy
+  - Menu.diff.normal
+  - Menu.diff.hard
+  - Menu.leader
+  - Universal.manager
   layers:
   - Default
   - TransparentFX

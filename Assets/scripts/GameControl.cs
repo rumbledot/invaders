@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour
@@ -28,10 +29,12 @@ public class GameControl : MonoBehaviour
     [SerializeField]
     private Dropdown selectDiffcultyLevel;
     private int diffLevel;
-    private String[] diffLevelString = 
-        new String[] {
-            "Easy", "Normal", "Hard"
-        };
+    private String[] diffLevelString = new string[] { "easy", "normal", "hard" };
+    private new DiffcultyClass[] diffs = {
+            new DiffcultyClass(1f, 1f, 1.2f),
+            new DiffcultyClass(1.2f, 1.2f, 1f),
+            new DiffcultyClass(1.4f, 1.4f, 0.8f)
+    };
     public float healthFactorial;
     public float speedFactorial;
     public float timerFactorial;
@@ -40,57 +43,42 @@ public class GameControl : MonoBehaviour
     void Awake()
     {
         MakeInstance();
+        if (UniversalManager.instance)
+        {
+            SetDiffLevel();
+        }
+        else {
+            SetEasyDiff();
+        }
+    }
+
+    void Start()
+    {
         scoreText = GameObject.FindGameObjectWithTag("TEXT.SCORE").GetComponent<Text>();
         pauseBtn = GameObject.Find("button.pause").GetComponent<Button>();
         pauseBtn.onClick.AddListener(ShowPausePanel);
         restartBtn.onClick.AddListener(RestartTheGame);
         menuBtn.onClick.AddListener(BackToMenu);
 
-        SetEasyDiff();
-
-        selectDiffcultyLevel.onValueChanged.AddListener(delegate
-        {
-            GetSelectedDiffculty(selectDiffcultyLevel);
-        });
-
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
-    public void GetSelectedDiffculty(Dropdown dd)
+    void Update()
     {
-        switch (dd.value)
+        if (score < 0)
         {
-            case 0:
-                SetEasyDiff();
-                break;
-            case 1:
-                SetNormalDiff();
-                break;
-            case 2:
-                SetHardDiff();
-                break;
-            default:
-                SetEasyDiff();
-                break;
+            ShowLoosePanel();
         }
+        scoreText.text = score.ToString();
     }
 
-    private void SetHardDiff()
+    private void SetDiffLevel()
     {
-        diffLevel = 2;
-        healthFactorial = 1.4f;
-        speedFactorial = 1.4f;
-        timerFactorial = 0.8f;
+        diffLevel = UniversalManager.instance.getDiffLevel();
+        healthFactorial = diffs[diffLevel].healthFactorial;
+        speedFactorial = diffs[diffLevel].speedFactorial;
+        timerFactorial = diffs[diffLevel].timerFactorial;
     }
-
-    private void SetNormalDiff()
-    {
-        diffLevel = 1;
-        healthFactorial = 1.2f;
-        speedFactorial = 1.2f;
-        timerFactorial = 1f;
-    }
-
     private void SetEasyDiff()
     {
         diffLevel = 0;
@@ -101,25 +89,27 @@ public class GameControl : MonoBehaviour
 
     private void BackToMenu()
     {
-        Debug.Log("BACK TO MENU");
+        UniversalManager.instance.addScore(score);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
     private void RestartTheGame()
     {
-        if (activeEnemies.transform.childCount > 0)
-        {
-            for (int i = 0; i < activeEnemies.transform.childCount; i++)
-            {
-                Destroy(activeEnemies.transform.GetChild(i).gameObject);
-            }
-        }
-        if (activeBullets.transform.childCount > 0)
-        {
-            for (int i = 0; i < activeBullets.transform.childCount; i++)
-            {
-                Destroy(activeBullets.transform.GetChild(i).gameObject);
-            }
-        }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //if (activeEnemies.transform.childCount > 0)
+        //{
+        //    for (int i = 0; i < activeEnemies.transform.childCount; i++)
+        //    {
+        //        Destroy(activeEnemies.transform.GetChild(i).gameObject);
+        //    }
+        //}
+        //if (activeBullets.transform.childCount > 0)
+        //{
+        //    for (int i = 0; i < activeBullets.transform.childCount; i++)
+        //    {
+        //        Destroy(activeBullets.transform.GetChild(i).gameObject);
+        //    }
+        //}
         spawnerManager.GetComponent<EnemySpawnerManager>().Restart();
         player.GetComponent<PlayerControl>().Restart();
         score = 0;
@@ -131,16 +121,6 @@ public class GameControl : MonoBehaviour
         {
             instance = this;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (score < 0)
-        {
-            ShowLoosePanel();
-        }
-        scoreText.text = score.ToString();
     }
 
     public void addScore(int point) 

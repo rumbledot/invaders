@@ -6,6 +6,7 @@ public class MoveCamera : MonoBehaviour
 {
     [SerializeField]
     private Transform center;
+    [SerializeField]
     private Transform player;
     private float factor = 0.8f;
     private float turn_speed = 1f;
@@ -14,7 +15,6 @@ public class MoveCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameControl.instance.player.transform;
         transform.position = new Vector3(30, player.position.y, player.position.z);
     }
 
