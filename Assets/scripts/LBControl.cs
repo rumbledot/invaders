@@ -13,8 +13,8 @@ public class LBControl : MonoBehaviour
 
     void Start()
     {
+        // score list
         var listOfScores = UniversalManager.instance.getScores();
-        listOfScores.Sort((p, q) => p.getScore().CompareTo(q.getScore()));
         for (int i = 0; i < 4; i++)
         {
             playerInitials[i].text = listOfScores[i].getName();

@@ -24,6 +24,7 @@ TagManager:
   - Menu.leader
   - Universal.manager
   - Menu.back
+  - BUTTON.SUBMIT.SCORE
   layers:
   - Default
   - TransparentFX

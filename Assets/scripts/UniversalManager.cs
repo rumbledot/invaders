@@ -3,19 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using UnityEditor.Build.Player;
 using UnityEngine;
 
 public class UniversalManager : MonoBehaviour
 {
-    private const string savedDataFilename = "/InvadersHallOfFace.dat";
+    // instantiate this class
     public static UniversalManager instance;
+
+    // difficulties variables
     private int diffLevel;
     private String[] diffLevelString =
         new String[] {
             "Easy", "Normal", "Hard"
         };
+    // scores list and filename
     private List<ScoreClass> scores = new List<ScoreClass>();
+    private const string savedDataFilename = "/InvadersHallOfFace.dat";
 
     void Awake()
     {
@@ -23,12 +26,7 @@ public class UniversalManager : MonoBehaviour
         LoadScore();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // instantiate and keep this class alive from scene to scene
     private void MakeInstancePersistent()
     {
         if (instance == null)
@@ -38,6 +36,7 @@ public class UniversalManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
+    // external functions
     public int getDiffLevel() 
     {
         return diffLevel;
@@ -52,10 +51,27 @@ public class UniversalManager : MonoBehaviour
     }
     public void addScore(string n, int s)
     {
+        // add the new score
         ScoreClass newScore = new ScoreClass(n, s);
         scores.Add(newScore);
+        // sort the scores list
+        scores.Sort((q, p) => p.getScore().CompareTo(q.getScore()));
+        // keep score list to 4 item
+        if (scores.Count > 4)
+        {
+            scores.RemoveRange(4, scores.Count - 4);
+        }
 
         SaveScores();
+    }
+
+    public Boolean CheckHighScore(int s)
+    {
+        if (s > scores[0].getScore())
+        {
+            return true;
+        }
+        return false;
     }
 
     public List<ScoreClass> getScores()
@@ -63,7 +79,8 @@ public class UniversalManager : MonoBehaviour
         return scores;
     }
 
-    void SaveScores()
+    // scores I/O
+    private void SaveScores()
     {
         if (File.Exists(Application.persistentDataPath + savedDataFilename))
         {
@@ -73,10 +90,9 @@ public class UniversalManager : MonoBehaviour
         FileStream file = File.Create(Application.persistentDataPath + savedDataFilename);
         bf.Serialize(file, scores);
         file.Close();
-        Debug.Log("Game data saved!");
     }
 
-    void LoadScore()
+    private void LoadScore()
     {
         if (File.Exists(Application.persistentDataPath + savedDataFilename))
         {
@@ -84,13 +100,17 @@ public class UniversalManager : MonoBehaviour
             FileStream file = File.Open(Application.persistentDataPath + savedDataFilename, FileMode.Open);
             var data = bf.Deserialize(file);
             file.Close();
-            Debug.Log("Game data loaded!" + data);
-            foreach (ScoreClass d in (List<ScoreClass>)data)
-            {
-                Debug.Log("SCORE : " + d.getName() + " : " + d.getScore());
-            }
             scores = (List<ScoreClass>)data;
         }
-        else Debug.LogError("There is no save data!");
+        else
+        {
+            scores = new List<ScoreClass>
+            {
+                new ScoreClass("aaa", 50),
+                new ScoreClass("bbb", 40),
+                new ScoreClass("ccc", 30),
+                new ScoreClass("ddd", 10),
+            };
+        }
     }
 }
